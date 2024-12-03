@@ -1,0 +1,57 @@
+set sql_save_updates = 0;
+create database clinicaveterinaria;
+USE clinicaveterinaria;
+create table cliente (
+cliente_id int auto_increment primary key,
+nome varchar(100),
+telefone varchar(15),
+email varchar(100),
+endereco varchar(255)
+);
+create table animais (
+animal_id int auto_increment primary key,
+cliente_id int,
+nome varchar(100),
+especie varchar(50),
+raca varchar(50),
+data_nascimento date not null,
+sexo enum('M, F'),
+foreign key (cliente_id) references cliente (cliente_id)
+);
+create table veterinarios (
+veterinario_id int auto_increment primary key,
+nome varchar(100),
+especialidade varchar(50),
+telefone varchar(15),
+email varchar(100)
+);
+create table consultas (
+consulta_id int auto_increment primary key,
+animal_id int not null,
+veterinario_id int not null,
+data_consulta datetime,
+diagnostico text,
+cliente_id int,
+foreign key (cliente_id) references cliente (cliente_id),
+foreign key (veterinario_id) references veterinarios (veterinario_id)
+);
+create table tratamentos (
+tatamento_id int auto_increment primary key,
+consulta_id int not null,
+descricao text,
+medicamento varchar(100),
+dose varchar(50),
+veterinario_id int,
+cliente_id int,
+foreign key (veterinario_id) references veterinarios (veterinario_id),
+foreign key (cliente_id) references veterinarios (cliente_id)
+);
+create table pagamentos (
+pagamento_id int auto_increment primary key,
+consulta_id int not null,
+valor decimal(10,2),
+data_pagamento date,
+metodo_pagamento enum('Dinheiro', 'Cartão', 'transferência'),
+foreign key (cliente_id) references cliente (cliente_id)
+);
+
